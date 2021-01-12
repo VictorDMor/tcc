@@ -127,3 +127,12 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# Images
+*.jpg
+*.png
+*.bmp
+*.heic
+
+# Trained weights
+*.h5
