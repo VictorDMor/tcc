@@ -2,10 +2,11 @@
     <head>
         {% load static %}
         <link rel='stylesheet' href='{% static "scout_generator/css/index.css" %}' />
+        <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro&display=swap" rel="stylesheet">
         <title>Football Matches Scout Generator</title>
     </head>
     <body>
         <img src="{% static 'scout_generator/img/'|add:event.image_name %}" alt='Event'/>
-        <h2>{{ event.event_name }}</h2>
+        <h2>Este evento é {{ event.event_name }}</h2>
     </body>
 </html>

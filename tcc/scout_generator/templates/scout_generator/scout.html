@@ -1,0 +1,90 @@
+<html>
+    <head>
+        {% load static %}
+        <link rel='stylesheet' href='{% static "scout_generator/css/index.css" %}' />
+        <link rel="stylesheet" href="https://vjs.zencdn.net/7.10.2/video-js.css" />
+        <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro&display=swap" rel="stylesheet">
+        <script
+            src="https://code.jquery.com/jquery-3.5.1.min.js"
+            integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0="
+            crossorigin="anonymous"></script>
+        <script src='{% static "scout_generator/js/index.js" %}'></script>
+        <script src="https://vjs.zencdn.net/7.10.2/video.min.js"></script>
+        <title>Football Matches Scout Generator</title>
+    </head>
+    <body>
+        <h1>Nome do arquivo: {{ video_name }}</h1>
+        <div class='video-scout-wrapper'>
+            <div class='video-box'>
+                <video
+                id="match-video"
+                class="video-js"
+                controls
+                preload="auto"
+                width="1280"
+                height="720"
+                poster=""
+                data-setup="{}">
+                <source src='{% static "scout_generator/video/"|add:video_name %}' type="video/mp4" />
+                <p class="vjs-no-js">
+                  To view this video please enable JavaScript, and consider upgrading to a
+                  web browser that
+                  <a href="https://videojs.com/html5-video-support/" target="_blank"
+                    >supports HTML5 video</a
+                  >
+                </p>
+              </video>
+            </div>
+            <div class='scout-box'>
+                <table class='scout-table'>
+                    {% if scout.goal %}
+                        <tr>
+                            <td>Gols: 2</td>
+                        </tr>
+                    {% endif %}
+                    {% if scout.freekick %}
+                        <tr>
+                            <td>Faltas: {{ scout.freekick }}</td>
+                        </tr>
+                    {% endif %}
+                    {% if scout.freekick %}
+                        <tr>
+                            <td>Escanteios: {{ scout.corner }}</td>
+                        </tr>
+                    {% endif %}
+                    {% if scout.penalty %}
+                        <tr>
+                            <td>Pênaltis: {{ scout.penalty }}</td>
+                        </tr>
+                    {% endif %}
+                </table>
+            </div>
+        </div>
+        <h2>Eventos em ordem de aparição:</h2>
+        {% for event in events %}
+            <div class='events'>
+                <h3>{{ event.timestamp }} segundos - {{ event.event_name }}</h3>
+                <div class='video-box'>
+                    <video
+                    id="match-video"
+                    class="video-js"
+                    controls
+                    preload="auto"
+                    width="{{ event.video_width }}"
+                    height="{{ event.video_height }}"
+                    poster=""
+                    data-setup="{}">
+                    <source src='{% static "scout_generator/video/tmp/"|add:event.video_src %}' type="video/mp4" />
+                    <p class="vjs-no-js">
+                        To view this video please enable JavaScript, and consider upgrading to a
+                        web browser that
+                        <a href="https://videojs.com/html5-video-support/" target="_blank"
+                        >supports HTML5 video</a
+                        >
+                    </p>
+                    </video>
+                </div>
+            </div>
+        {% endfor %}
+    </body>
+</html>

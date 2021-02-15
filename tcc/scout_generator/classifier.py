@@ -1,29 +1,58 @@
 from keras.models import model_from_json
-from keras.preprocessing.image import ImageDataGenerator, img_to_array
+from keras.preprocessing.image import load_img, ImageDataGenerator, img_to_array
+from PIL import Image
+import json
 import numpy as np
 import os
+import cv2
 
-def preprocess(image_array):
-    image_array = (image_array[:, :, :-1])/255
-    return image_array.reshape(-1, 200, 200, 3)
+POSSIBLE_RESULTS = {
+    0: 'pênalti',
+    1: 'falta',
+    2: 'bola rolando'
+}
 
-def identify_event(event, name):
+def check_threshold(image):
+    hsv = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
+    green_lower = np.array([30, 40, 40])
+    green_higher = np.array([70, 255, 255])
+    mask = cv2.inRange(hsv, green_lower, green_higher)
+    green_pixels_amount = image[mask > 0].shape[0]
+    if green_pixels_amount/(image.shape[0] * image.shape[1]) < 0.6:
+        return True
+    return False
+
+def check_similarity(image):
+    pass
+
+def load_model(path):
     # load json and create model
-    json_file = open('model/model.json', 'r')
+    json_file = open(path, 'r')
     loaded_model_json = json_file.read()
     json_file.close()
     loaded_model = model_from_json(loaded_model_json)
+
     # load weights into new model
     loaded_model.load_weights('model/model.h5')
 
-    # Resize image
-    event = event.resize((200, 200))
-    event_array = preprocess(img_to_array(event))
-    result = loaded_model.predict_classes(event_array)
-    
-    if result == 0:
-        return 'Esse evento é um pênalti'
-    elif result == 1:
-        return 'Esse evento é uma falta'
+    return loaded_model
+
+def get_input_shape(model_json_path):
+    with open(model_json_path) as json_file:
+        data = json.load(json_file)
+        input_shape_array = data['config']['layers'][0]['config']['batch_input_shape']
+        return (input_shape_array[1], input_shape_array[2])
+
+def identify_event(model, image=None, path=None):
+    input_shape = get_input_shape('model/model.json')
+    if image is not None:
+        image = cv2.resize(image, (input_shape[1], input_shape[0]))
+    elif path is not None:
+        image = load_img(path, target_size=(input_shape[0], input_shape[1]))
     else:
-        return 'Esse evento é um escanteio'
+        return 'No image or path!'
+    preprocessed_image = np.expand_dims(img_to_array(image), axis=0)
+    prediction = model.predict(preprocessed_image)
+    result = np.argmax(prediction, axis=-1)
+    
+    return POSSIBLE_RESULTS[result[0]]

@@ -1,6 +1,8 @@
 <html>
     <head>
         {% load static %}
+        <link rel="preconnect" href="https://fonts.gstatic.com">
+        <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro&display=swap" rel="stylesheet">
         <link rel='stylesheet' href='{% static "scout_generator/css/index.css" %}' />
         <script
             src="https://code.jquery.com/jquery-3.5.1.min.js"
@@ -11,6 +13,9 @@
     </head>
     <body>
         <h1>Detecção de eventos em partidas de futebol usando Redes Neurais Convolucionais</h1>
+        <div class='training-row'>
+            <a href='train/'>Treinar rede</a>
+        </div>
         <div class='radio-row'>
             <input type='radio' name='predict-option' id='scout' value='scout'>
             <label for='scout'>Gerar scout a partir de vídeo</label>
@@ -30,7 +35,7 @@
         <form action='scout/' method='post' enctype="multipart/form-data" class='scout-form'>
             {% csrf_token %}
             <div class='form-row'>
-                <label for='image'>Carregue um vídeo: </label>
+                <label for='image'>Carregue um vídeo (apenas formato MP4): </label>
                 <input type='file' accept='video/*' id='video' name='video' />
             </div>
             <div class='form-row'>

@@ -1,26 +1,31 @@
 a {
     text-decoration: none;
+    color: rgb(32, 139, 11);
 }
 
 a:hover {
-    text-decoration: navy;
+    color: white;
+    background-color: rgb(32, 139, 11);
 }
 
 a:visited {
     color: #0000ff;  
 }
 
-img {
-    width: 50%;
-    height: 50%;
+body {
+    font-family: 'Source Sans Pro', sans-serif;
 }
 
-.form-row {
+.form-row, .radio-row, .training-row {
     margin-bottom: 10px;
 }
 
-.radio-row {
-    margin-bottom: 10px;
+.training-row a {
+    font-size: 20px;
+}
+
+.event-options-form {
+    margin-top: 20px;
 }
 
 .predict-form {
@@ -29,4 +34,37 @@ img {
 
 .scout-form {
     display: none;
+}
+
+.scout-box {
+    margin-left: 20px;
+}
+
+.scout-box td {
+    font-size: 20px;
+}
+
+.video-box {
+    height: 720px;
+    width: 1280px;
+}
+
+.frame-box {
+    height: 480px;
+    width: 640px;
+}
+
+.video-scout-wrapper {
+    display: flex;
+}
+
+.follow-network {
+    width: 200px;
+    height: 200px;
+    font-size: 20px;
+}
+
+.frame-img {
+    max-height: 480px;
+    max-width: 640px;
 }
