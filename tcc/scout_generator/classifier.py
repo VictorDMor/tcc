@@ -1,6 +1,7 @@
 from keras.models import model_from_json
 from keras.preprocessing.image import load_img, ImageDataGenerator, img_to_array
 from PIL import Image
+from skimage.metrics import structural_similarity
 import json
 import numpy as np
 import os
@@ -22,8 +23,11 @@ def check_threshold(image):
         return True
     return False
 
-def check_similarity(image):
-    pass
+def check_similarity(f1, f2):
+    first_frame = cv2.cvtColor(f1, cv2.COLOR_BGR2GRAY)
+    second_frame = cv2.cvtColor(f2, cv2.COLOR_BGR2GRAY)
+    (score, _) = structural_similarity(first_frame, second_frame, full=True)
+    return score
 
 def load_model(path):
     # load json and create model

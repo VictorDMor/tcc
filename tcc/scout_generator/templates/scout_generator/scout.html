@@ -60,6 +60,29 @@
                 </table>
             </div>
         </div>
+        <h2>Melhores momentos:</h2>
+        <div class='events'>
+            <div class='video-box'>
+                <video
+                id="match-video"
+                class="video-js"
+                controls
+                preload="auto"
+                width="{{ event.video_width }}"
+                height="{{ event.video_height }}"
+                poster=""
+                data-setup="{}">
+                <source src='{% static "scout_generator/video/tmp/"|add:highlight %}' type="video/mp4" />
+                <p class="vjs-no-js">
+                    To view this video please enable JavaScript, and consider upgrading to a
+                    web browser that
+                    <a href="https://videojs.com/html5-video-support/" target="_blank"
+                    >supports HTML5 video</a
+                    >
+                </p>
+                </video>
+            </div>
+        </div>
         <h2>Eventos em ordem de aparição:</h2>
         {% for event in events %}
             <div class='events'>

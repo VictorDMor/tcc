@@ -1,13 +1,19 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from .forms import TrainImageForm, UploadImageForm, UploadVideoForm
-from .utils import classify_image, generate_report, get_training_image, handle_uploaded_file, handle_uploaded_video, load_model
+from .utils import classify_image, screenshotter, \
+    generate_report, get_training_image, handle_uploaded_file, \
+    handle_uploaded_video, load_model
 
 model = load_model('model/model.json')
 
 # Create your views here.
 def index(request):
     return render(request, 'scout_generator/index.html')
+
+def get_images(request):
+    screenshotter(model)
+    return HttpResponse('Done!')
 
 def predict_event(request):
     form = UploadImageForm(request.POST, request.FILES)
@@ -55,7 +61,7 @@ def generate_scout(request):
         video = request.FILES['video']
         video_name = video.name
         downloaded_path = handle_uploaded_video(video)
-        report, scout = generate_report(downloaded_path, video_name, model)
-        return render(request, 'scout_generator/scout.html', {'video_name': video_name, 'events': report, 'scout': scout})
+        report, scout, highlights = generate_report(downloaded_path, video_name, model)
+        return render(request, 'scout_generator/scout.html', {'video_name': video_name, 'events': report, 'scout': scout, 'highlights': highlights})
     else:
         return HttpResponse('Fail: {}'.format(form.errors))
